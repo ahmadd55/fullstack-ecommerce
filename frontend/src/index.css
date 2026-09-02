@@ -1,0 +1,502 @@
+@import "tailwindcss";
+
+@theme {
+  --color-primary: #006c49;
+  --color-primary-container: #10b981;
+  --color-on-primary: #ffffff;
+  --color-secondary: #2b6954;
+  --color-background: #f8f9fa;
+  --color-on-background: #191c1d;
+  --color-surface: #f8f9fa;
+  --color-on-surface: #191c1d;
+  --color-surface-container-lowest: #ffffff;
+  --color-surface-container-low: #f3f4f5;
+  --color-outline-variant: #bbcabf;
+  --color-on-surface-variant: #3c4a42;
+
+  
+  --spacing-sidebar-width: 280px;
+  --spacing-gutter: 24px;
+}
+
+
+body {
+  font-family: 'Inter', sans-serif;
+  background-color: var(--color-background);
+}
+
+
+.navbar {
+  @apply flex justify-evenly items-center h-20 fixed bg-white w-full top-0 z-50;
+
+}
+
+.menus ul {
+  @apply flex gap-7
+}
+
+.icons {
+  @apply flex gap-7
+}
+
+.slider img {
+  @apply w-full h-auto pt-20
+}
+
+.footer {
+  @apply bg-[#ebebeb] w-full;
+}
+
+.footer-container {
+  @apply grid grid-cols-4 max-w-[1170px] mx-auto py-16;
+}
+
+.footer ul {
+  @apply flex flex-col gap-3
+}
+
+.footer h3 {
+  @apply mb-5 font-semibold
+}
+
+.newsletter {
+  @apply flex flex-col gap-4
+}
+
+.form {
+  @apply flex flex-col gap-8 w-90
+}
+
+
+.submited,
+.send {
+  @apply relative w-full max-w-[420px];
+}
+
+.submited input,
+.send input {
+  @apply w-full rounded-md px-5 py-2 border border-black bg-transparent outline-none;
+}
+
+.submited button,
+.send button {
+  @apply absolute right-0 top-0 h-full px-8 rounded-lg bg-black text-white font-semibold w-32;
+}
+
+
+.cards-container {
+  @apply grid grid-cols-5 py-5 px-5 gap-y-10;
+}
+
+.trending {
+  @apply flex justify-between border-b-[2px] pb-3 pt-5 px-5
+}
+
+.trending ul {
+  @apply flex gap-3
+}
+
+.trending ul button {
+  @apply rounded-[20px] px-3 py-1 bg-[#f5f5f5]
+}
+
+#read-to-wear {
+  @apply bg-[#8CC63F] text-white font-bold
+}
+
+.trending h3 {
+  @apply font-bold text-2xl
+}
+
+.cards {
+  @apply flex flex-col w-70 gap-3;
+  
+}
+
+.cards img {
+  @apply w-full h-105 rounded-[20px] shadow
+}
+
+.new-chart-btn {
+  @apply flex justify-between
+}
+
+.btn-icon {
+  @apply flex rounded-[10px] bg-[#ebebeb] items-center px-3 gap-1
+}
+
+#btn1 {
+  @apply text-[#8CC63F] rounded-[10px] px-2 border border-[#ebebeb]
+}
+
+.detail-container {
+  @apply flex px-5 gap-3 pt-20 items-start mb-10
+}
+
+.detail-images {
+  @apply grid grid-cols-2 flex-1 gap-3
+}
+
+.detail-images img {
+  @apply w-full h-auto rounded-lg shadow
+}
+
+#detail-images-full {
+  @apply col-span-2;
+
+}
+
+.login-heading {
+  @apply flex flex-col
+}
+
+.login {
+  @apply flex flex-col justify-between items-center h-screen;
+}
+
+.login-card {
+  @apply flex flex-col gap-3
+}
+
+.login-card h1 {
+  @apply font-semibold text-2xl
+}
+
+.Product-description {
+  @apply flex justify-between;
+}
+
+.icon-plus {
+  @apply w-4 h-4;
+}
+
+.social-btn {
+  @apply flex justify-evenly gap-2;
+}
+
+.social-btn a {
+  @apply border border-[#E2E2E2] rounded-xl px-20 py-3
+}
+
+.social-btn svg {
+  @apply w-5 h-5;
+}
+
+.separtor {
+  @apply flex justify-between items-center gap-3
+}
+
+.line {
+  @apply flex-1 bg-gray-300 h-px
+}
+
+.privacy-policy {
+  @apply text-[#8CC63F] py-4 text-sm
+}
+
+.login-email {
+  @apply flex justify-between border border-[#E2E2E2] rounded-xl px-2 py-3
+}
+
+.checking {
+  @apply flex gap-1.5 items-center
+}
+
+.checking input,
+.checking label {
+  @apply cursor-pointer
+}
+
+.checking input {
+  @apply appearance-none border border-[#E2E2E2] rounded-md w-4 h-4 shrink-0 relative checked:bg-[#8CC63F] checked:border-[#8CC63F];
+}
+
+.checking input:checked::after {
+  content: "";
+  @apply absolute w-1.5 h-2.5 border-white border-r-2 border-b-2;
+  top: 45%;
+  left: 50%;
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.detail-info {
+  @apply flex flex-col;
+  width: 40%;
+  padding: 30px;
+  position: sticky;
+  top: 90px;
+}
+
+.detail-info h1 {
+  font-size: 30px;
+  font-weight: 500;
+  margin-bottom: 15px;
+}
+
+.stock {
+  color: #8cc63f;
+  margin-bottom: 15px;
+  font-size: 15px;
+}
+
+.detail-info h2 {
+  font-size: 28px;
+  margin-bottom: 25px;
+}
+
+.quantity {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  margin-bottom: 30px;
+}
+
+.quantity button {
+  width: 40px;
+  height: 40px;
+  font-size: 22px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.quantity span {
+  font-size: 20px;
+}
+
+.sizes h3 {
+  margin-bottom: 15px;
+  font-size: 17px;
+}
+
+.size-buttons {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 20px;
+}
+
+.size-buttons button {
+  padding: 12px 18px;
+  border: 1px solid #ccc;
+  background: white;
+  cursor: pointer;
+}
+
+.active-size {
+  background: black !important;
+  color: white;
+}
+
+.size-chart {
+  width: 100%;
+  padding: 14px;
+  margin-bottom: 15px;
+  border: 1px solid black;
+  background: white;
+  cursor: pointer;
+}
+
+.add-cart {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  background: #8cc63f;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+  margin-bottom: 15px;
+}
+
+.buy-now {
+  width: 100%;
+  padding: 16px;
+  border: none;
+  background: black;
+  color: white;
+  font-size: 17px;
+  cursor: pointer;
+}
+
+.accordion {
+  border-top: 1px solid #ddd;
+}
+
+.accordion:last-child {
+  border-bottom: 1px solid #ddd;
+}
+
+.accordion-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 18px 0;
+  cursor: pointer;
+}
+
+.accordion-header h4 {
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.accordion-header span {
+  font-size: 28px;
+  font-weight: 300;
+}
+
+.accordion-body {
+  padding-bottom: 20px;
+}
+
+.accordion-body h4 {
+  margin-bottom: 15px;
+}
+
+.accordion-body p {
+  margin-bottom: 12px;
+  color: #555;
+  line-height: 1.7;
+}
+
+.delivery-row {
+  display: flex;
+  justify-content: space-between;
+  padding: 12px 0;
+  border-bottom: 1px solid #eee;
+}
+
+.delivery-row:last-child {
+  border: none;
+}
+
+.checkout-header {
+  @apply flex justify-center items-center h-[100px] border-b border-[#E2E2E2]
+}
+
+.checkout-container {
+  @apply flex gap-16 px-10 py-10 items-start max-w-[1400px] mx-auto justify-center
+}
+
+.checkout-form {
+  @apply flex flex-col gap-8 w-full max-w-[620px]
+}
+
+.checkout-section {
+  @apply flex flex-col gap-4 border-b border-[#E2E2E2] pb-8
+}
+
+.section-title {
+  @apply flex justify-between items-center
+}
+
+.checkout-input {
+  @apply w-full border border-[#E2E2E2] rounded-xl px-3 py-3 outline-none
+}
+
+.two-col {
+  @apply grid grid-cols-2 gap-3
+}
+
+.shipping-method {
+  @apply flex justify-between items-center border border-[#E2E2E2] rounded-xl px-4 py-3
+}
+
+.payment-note {
+  @apply text-sm
+}
+
+.payment-options {
+  @apply flex flex-col
+}
+
+.payment-option {
+  @apply flex items-center gap-3 border border-[#E2E2E2] px-4 py-4 cursor-pointer
+}
+
+.payment-option:first-child {
+  @apply rounded-t-xl
+}
+
+.payment-option:last-child {
+  @apply rounded-b-xl
+}
+
+.active-payment {
+  @apply bg-[#f5f5f5]
+}
+
+.billing-options {
+  @apply flex flex-col
+}
+
+.billing-option {
+  @apply flex items-center gap-3 border border-[#E2E2E2] px-4 py-4 cursor-pointer
+}
+
+.billing-option:first-child {
+  @apply rounded-t-xl
+}
+
+.billing-option:last-child {
+  @apply rounded-b-xl border-t-0
+}
+
+.complete-order {
+  @apply w-full py-4 bg-black text-white font-semibold rounded-xl
+}
+
+.order-summary {
+  @apply flex flex-col gap-6 bg-transparent p-0 w-full max-w-[480px]
+}
+
+.cart-item {
+  @apply flex items-center gap-3
+}
+
+.cart-item img {
+  @apply w-16 h-16 rounded-lg object-cover
+}
+
+.cart-item-info {
+  @apply flex flex-col flex-1
+}
+
+.cart-item-info span {
+  @apply text-sm
+}
+
+.cart-item-price {
+  @apply text-sm font-medium
+}
+
+.discount-code {
+  @apply flex gap-2
+}
+
+.discount-code input {
+  @apply flex-1 border border-[#E2E2E2] rounded-xl px-3 py-2 outline-none
+}
+
+.discount-code button {
+  @apply px-4 rounded-xl border border-[#E2E2E2]
+}
+
+.cost-summary {
+  @apply flex flex-col gap-3 border-t border-[#E2E2E2] pt-4
+}
+
+.cost-row {
+  @apply flex justify-between text-sm
+}
+
+.total-row {
+  @apply text-base
+}
+
+.checkout-footer {
+  @apply flex flex-col items-center gap-2 border-t border-[#E2E2E2] py-6
+}
+
+.payment-icons {
+  @apply w-[299px] h-[55px] object-contain
+}
