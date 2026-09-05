@@ -6,6 +6,7 @@ export default function UserProfile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState("");
 
   useEffect(() => {
     const fetchProfile = async () => {
@@ -18,14 +19,22 @@ export default function UserProfile() {
 
       try {
         setLoading(true);
-        const response = await api.get("/auth/me", {
-          headers: { Authorization: `Bearer ${token}` },
-        });
+        const response = await api.get("/users/me");
 
         setUser(response.data?.data || response.data);
       } catch (error) {
         console.log("Error fetching profile:", error);
-        handleLogout();
+
+        const status = error.response?.status;
+
+        if (status === 401 || status === 403) {
+          handleLogout();
+        } else {
+          setError(
+            error.response?.data?.message ||
+              "Could not load your profile. Please try again.",
+          );
+        }
       } finally {
         setLoading(false);
       }
@@ -99,7 +108,9 @@ export default function UserProfile() {
             </div>
           </div>
         ) : (
-          <p className="text-gray-500">Profile data not available.</p>
+          <p className="text-gray-500">
+            {error || "Profile data not available."}
+          </p>
         )}
       </div>
     </div>

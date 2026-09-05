@@ -29,7 +29,6 @@ export default function App() {
           
           <Route path="/" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
-          <Route path="/login" element={<Login />} />
           <Route path="/category/:id" element={<CategoryPage />} />
 
           <Route element={<UserRoute />}>
@@ -38,6 +37,8 @@ export default function App() {
             <Route path="/profile" element={<UserProfile />} />
           </Route>
         </Route>
+
+        <Route path="/login" element={<Login />} />
 
         <Route path="/admin/login" element={<AdminLogin />} />
 

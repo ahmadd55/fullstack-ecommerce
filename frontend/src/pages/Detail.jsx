@@ -126,10 +126,11 @@ export default function Detail() {
         <div className="detail-info">
           <h1>{product.title}</h1>
 
-          <p className="stock">
-            Hurry only <strong>{product.stock || 3} items left</strong> in
-            stock!
-          </p>
+          {product.stock <= 5 && (
+            <p className="stock">
+              Hurry only <strong>{product.stock} items left</strong> in stock!
+            </p>
+          )}
 
           <h2>Rs. {product.price}</h2>
 

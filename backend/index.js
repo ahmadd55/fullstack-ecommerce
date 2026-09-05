@@ -25,6 +25,8 @@ app.get("/", (req, res) => {
 
 app.use(corsMiddleware);
 app.use(express.json());
+app.use(express.urlencoded({ extended: true }));
+app.use("/uploads", express.static("public/uploads"));
 
 app.use("/api/auth", authRoute);
 
@@ -39,8 +41,24 @@ app.use("/api/orders", orderRoutes);
 app.use("/api/users", userRoutes);
 app.use("/api/dashboard", dashboardRoutes);
 
-app.use(express.urlencoded({ extended: true }));
-app.use("/uploads", express.static("public/uploads"));
+app.use((req, res) => {
+  res.status(404).json({
+    statusCode: 404,
+    success: false,
+    message: `Route not found: ${req.method} ${req.originalUrl}`,
+  });
+});
+
+app.use((err, req, res, next) => {
+  const statusCode = err.statusCode || 500;
+
+  res.status(statusCode).json({
+    statusCode,
+    success: false,
+    message: err.message || "Internal server error",
+    errors: err.errors || [],
+  });
+});
 
 
 try {

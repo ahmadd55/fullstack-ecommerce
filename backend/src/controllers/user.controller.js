@@ -1,13 +1,15 @@
 import { asyncHandler } from "../utils/asyncHandler.js";
 import { ApiResponse } from "../utils/ApiResponse.js";
 import { getCustomersForAdmin, updateCustomerByAdmin, deleteCustomerByAdmin } from "../services/user.service.js";
+import { getCurrentUser } from "../services/auth.service.js";
 
 
 export const getProfile = asyncHandler(async (req, res) => {
-  
+  const { user } = await getCurrentUser(req.user.id);
+
   return res
     .status(200)
-    .json(new ApiResponse(200, req.user, "Profile fetched successfully"));
+    .json(new ApiResponse(200, user, "Profile fetched successfully"));
 });
 
 export const updateProfile = asyncHandler(async (req, res) => {
