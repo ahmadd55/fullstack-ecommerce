@@ -5,6 +5,7 @@ import api from "../api/axios";
 export default function UserProfile() {
   const navigate = useNavigate();
   const [user, setUser] = useState(null);
+  const [address, setAddress] = useState(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState("");
 
@@ -19,19 +20,36 @@ export default function UserProfile() {
 
       try {
         setLoading(true);
-        const response = await api.get("/users/me");
 
-        setUser(response.data?.data || response.data);
-      } catch (error) {
-        console.log("Error fetching profile:", error);
+        const [profileResult, addressResult] = await Promise.allSettled([
+          api.get("/users/me"),
+          api.get("/addresses"),
+        ]);
 
-        const status = error.response?.status;
+        if (profileResult.status === "rejected") {
+          throw profileResult.reason;
+        }
+
+        const profileResponse = profileResult.value;
+        setUser(profileResponse.data?.data || profileResponse.data);
+
+        if (addressResult.status === "fulfilled") {
+          const addressResponse = addressResult.value;
+          const addresses =
+            addressResponse.data?.data || addressResponse.data || [];
+
+          setAddress(Array.isArray(addresses) ? addresses[0] : addresses);
+        }
+      } catch (err) {
+        console.log("Error fetching profile:", err);
+
+        const status = err.response?.status;
 
         if (status === 401 || status === 403) {
           handleLogout();
         } else {
           setError(
-            error.response?.data?.message ||
+            err.response?.data?.message ||
               "Could not load your profile. Please try again.",
           );
         }
@@ -49,70 +67,106 @@ export default function UserProfile() {
     navigate("/login");
   };
 
+  const addressLines = address
+    ? [
+        address.addressLine1,
+        address.addressLine2,
+        [address.city, address.state].filter(Boolean).join(", "),
+        address.postalCode,
+        address.country,
+      ].filter(Boolean)
+    : [];
+
   if (loading) {
     return (
-      <div className="text-center py-20 text-xl font-semibold">
-        Loading Profile...
+      <div className="max-w-[1000px] mx-auto px-5 pt-28 pb-16 min-h-screen">
+        <p className="text-[rgba(0,0,0,0.56)]">Loading profile...</p>
       </div>
     );
   }
 
   return (
-    <div className="max-w-3xl mx-auto px-4 py-12">
-      <div className="bg-white border border-gray-200 rounded-lg p-8 shadow-sm">
-        <div className="flex items-center justify-between mb-8 pb-4 border-b">
-          <h1 className="text-3xl font-bold text-gray-800">My Account</h1>
-          <button
-            onClick={handleLogout}
-            className="bg-red-50 text-red-600 px-4 py-2 rounded font-medium hover:bg-red-100 transition-colors flex items-center gap-2"
-          >
-            <span className="material-symbols-outlined text-[20px]">
-              logout
-            </span>
-            Logout
-          </button>
-        </div>
+    <div className="max-w-[1000px] mx-auto px-5 pt-28 pb-20 min-h-screen">
+      <div className="flex items-end justify-between border-b border-[#E2E2E2] pb-4 mb-10">
+        <h1 className="text-3xl font-normal tracking-tight">Profile</h1>
 
-        {user ? (
-          <div className="space-y-6">
-            <div className="flex items-center gap-4">
-              <div className="w-16 h-16 bg-gray-200 text-gray-600 rounded-full flex items-center justify-center text-2xl font-bold uppercase">
-                {user.firstName?.charAt(0) || ""}
-                {user.lastName?.charAt(0) || "U"}
-              </div>
-              <div>
-                <h2 className="text-xl font-semibold">
-                  {user.firstName} {user.lastName}
-                </h2>
-                <p className="text-gray-500">{user.email}</p>
-              </div>
+        <button
+          onClick={handleLogout}
+          className="text-sm font-medium text-[rgba(0,0,0,0.56)] hover:text-black transition-colors underline underline-offset-4"
+        >
+          Logout
+        </button>
+      </div>
+
+      {!user ? (
+        <p className="text-[rgba(0,0,0,0.56)]">
+          {error || "Profile data not available."}
+        </p>
+      ) : (
+        <>
+          <div className="flex items-center gap-4 mb-12">
+            <div className="w-14 h-14 rounded-full bg-[#F4F4F4] text-[rgba(0,0,0,0.72)] flex items-center justify-center text-lg font-medium uppercase">
+              {user.firstName?.charAt(0) || ""}
+              {user.lastName?.charAt(0) || "U"}
             </div>
-
-            <div className="grid grid-cols-1 md:grid-cols-2 gap-6 mt-8 border-t pt-8">
-              <div className="bg-gray-50 p-4 rounded border border-gray-100">
-                <p className="text-sm text-gray-500 font-medium mb-1">
-                  Phone Number
-                </p>
-                <p className="text-gray-900 font-medium">
-                  {user.phone || "Not provided"}
-                </p>
-              </div>
-              <div className="bg-gray-50 p-4 rounded border border-gray-100">
-                <p className="text-sm text-gray-500 font-medium mb-1">
-                  Account Role
-                </p>
-                <p className="text-gray-900 font-medium capitalize">
-                  {user.role || "Customer"}
-                </p>
-              </div>
+            <div>
+              <h2 className="text-lg font-medium">
+                {user.firstName} {user.lastName}
+              </h2>
+              <p className="text-sm text-[rgba(0,0,0,0.56)]">{user.email}</p>
             </div>
           </div>
-        ) : (
-          <p className="text-gray-500">
-            {error || "Profile data not available."}
-          </p>
-        )}
-      </div>
+
+          <div className="grid grid-cols-1 md:grid-cols-2 gap-10">
+            <section>
+              <div className="flex items-center justify-between border-b border-[#E2E2E2] pb-3 mb-5">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+                  Contact Information
+                </h3>
+              </div>
+
+              <dl className="space-y-4 text-sm">
+                <div>
+                  <dt className="text-[rgba(0,0,0,0.56)] mb-1">Name</dt>
+                  <dd className="font-medium">
+                    {user.firstName} {user.lastName}
+                  </dd>
+                </div>
+                <div>
+                  <dt className="text-[rgba(0,0,0,0.56)] mb-1">Email</dt>
+                  <dd className="font-medium break-all">{user.email}</dd>
+                </div>
+              </dl>
+            </section>
+
+            <section>
+              <div className="flex items-center justify-between border-b border-[#E2E2E2] pb-3 mb-5">
+                <h3 className="text-xs font-semibold uppercase tracking-[0.12em]">
+                  Address
+                </h3>
+                {address?.title && (
+                  <span className="text-xs text-[rgba(0,0,0,0.56)]">
+                    {address.title}
+                  </span>
+                )}
+              </div>
+
+              {addressLines.length > 0 ? (
+                <address className="not-italic text-sm font-medium leading-7">
+                  {addressLines.map((line) => (
+                    <div key={line}>{line}</div>
+                  ))}
+                </address>
+              ) : (
+                <p className="text-sm text-[rgba(0,0,0,0.56)]">
+                  You have not saved an address yet. Your delivery address is
+                  saved when you place an order.
+                </p>
+              )}
+            </section>
+          </div>
+        </>
+      )}
     </div>
   );
 }
