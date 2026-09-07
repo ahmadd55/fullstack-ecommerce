@@ -1,55 +1,55 @@
-import Home from "../pages/Home";
 import { Link } from "react-router-dom";
 
-export default function Card({ product }) {
-  
-  const imagePath = product.images?.[0]?.image || product.images?.[0];
+const resolveImage = (image) => {
+  const path = image?.image || image;
 
-  
-  const imgSrc = imagePath
-    ? imagePath.startsWith("http")
-      ? imagePath
-      : `http://localhost:3000${imagePath}` 
-    : "https://via.placeholder.com/150?text=No+Image";
+  if (!path) return "/placeholder.png";
 
+  return path.startsWith("http") ? path : `http://localhost:3000${path}`;
+};
+
+export default function Card({ product, isWishlisted, onWishlistToggle }) {
   return (
-    <Link to={`/detail/${product.id}`} className="card-link">
-      <div className="cards">
+    <Link to={`/detail/${product.id}`} className="cards group">
+      <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[14px] sm:rounded-[20px] bg-[#f5f5f5] shadow">
+        <img
+          src={resolveImage(product.images?.[0])}
+          alt={product.title}
+          className="w-full h-full object-cover"
+          loading="lazy"
+        />
 
-        <img src={imgSrc} alt={product.title || "Product"} />
-
-        <div className="new-chart-btn">
-          <button id="btn1">New</button>
-
-          <div className="btn-icon">
+        {onWishlistToggle && (
+          <button
+            type="button"
+            onClick={(e) => onWishlistToggle(e, product.id)}
+            title={isWishlisted ? "Remove from Wishlist" : "Add to Wishlist"}
+            className={`absolute top-2 right-2 sm:top-4 sm:right-4 w-8 h-8 sm:w-10 sm:h-10 bg-white rounded-full flex items-center justify-center shadow-md transition-all duration-300 z-10 ${
+              isWishlisted
+                ? "text-red-500"
+                : "text-gray-400 hover:text-red-500 hover:shadow-lg"
+            }`}
+          >
             <svg
               xmlns="http://www.w3.org/2000/svg"
-              width="12"
-              height="16"
-              viewBox="0 0 12 16"
-              fill="#232323"
-              className="icon icon-cart"
+              fill={isWishlisted ? "currentColor" : "none"}
+              viewBox="0 0 24 24"
+              strokeWidth={2}
+              stroke="currentColor"
+              className="w-4 h-4 sm:w-5 sm:h-5"
             >
               <path
-                d="M8.46861 14.9963V12.437H5.81787V11.5839H8.46861V9.02457H9.35219V11.5839H12.0029V12.437H9.35219V14.9963H8.46861Z"
-                fill="#232323"
-              />
-              <path
-                d="M10.2257 4.68741C11.3251 4.80893 12.1358 5.81656 11.9845 6.94131L11.461 10.8319H10.3507L10.8946 6.79483L10.9024 6.69424C10.9141 6.19668 10.5127 5.77432 10.0021 5.77432H2.05283C1.50823 5.77452 1.08858 6.25506 1.16123 6.79483L2.06748 13.5292C2.12759 13.9758 2.50948 14.3094 2.96006 14.3095H7.22373V15.4091H2.96006L2.77354 15.4013C1.91622 15.3218 1.20382 14.6984 1.01084 13.8593L0.977637 13.6767L0.0704101 6.94131C-0.0807972 5.81681 0.730126 4.80926 1.8292 4.68741L2.05283 4.67471H10.0021L10.2257 4.68741Z"
-                fill="#232323"
-              />
-              <path
-                d="M6.20898 0.419098C8.06868 0.513381 9.5476 2.05068 9.54785 3.93375V7.49429H8.44824V3.93375C8.44798 2.59759 7.36447 1.51409 6.02832 1.51382C4.69194 1.51382 3.60769 2.59743 3.60742 3.93375V7.49429H2.50781V3.93375C2.50808 1.98992 4.08443 0.414215 6.02832 0.414215L6.20898 0.419098Z"
-                fill="#232323"
+                strokeLinecap="round"
+                strokeLinejoin="round"
+                d="M21 8.25c0-2.485-2.099-4.5-4.688-4.5-1.935 0-3.597 1.126-4.312 2.733-.715-1.607-2.377-2.733-4.313-2.733C5.1 3.75 3 5.765 3 8.25c0 7.22 9 12 9 12s9-4.78 9-12Z"
               />
             </svg>
-            <button id="btn2">Add to Cart</button>
-          </div>
-        </div>
-
-        <p>{product.title}</p>
-        <p>Rs.{product.price}</p>
+          </button>
+        )}
       </div>
+
+      <h4 className="text-sm sm:text-base line-clamp-2">{product.title}</h4>
+      <p className="text-sm sm:text-base font-medium">Rs. {product.price}</p>
     </Link>
   );
 }

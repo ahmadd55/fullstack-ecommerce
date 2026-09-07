@@ -27,8 +27,7 @@ body {
 
 
 .navbar {
-  @apply flex justify-evenly items-center h-20 fixed bg-white w-full top-0 z-50;
-
+  @apply flex justify-between items-center gap-4 h-20 fixed bg-white w-full top-0 z-50 px-4 md:px-8 lg:justify-evenly lg:px-0;
 }
 
 .menus ul {
@@ -36,7 +35,7 @@ body {
 }
 
 .icons {
-  @apply flex gap-7
+  @apply flex gap-4 sm:gap-7
 }
 
 .slider img {
@@ -48,7 +47,7 @@ body {
 }
 
 .footer-container {
-  @apply grid grid-cols-4 max-w-[1170px] mx-auto py-16;
+  @apply grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-10 lg:gap-6 max-w-[1170px] mx-auto px-5 py-10 sm:py-16;
 }
 
 .footer ul {
@@ -64,7 +63,7 @@ body {
 }
 
 .form {
-  @apply flex flex-col gap-8 w-90
+  @apply flex flex-col gap-6 sm:gap-8 w-full max-w-[360px]
 }
 
 
@@ -80,20 +79,20 @@ body {
 
 .submited button,
 .send button {
-  @apply absolute right-0 top-0 h-full px-8 rounded-lg bg-black text-white font-semibold w-32;
+  @apply absolute right-0 top-0 h-full px-4 sm:px-8 rounded-lg bg-black text-white font-semibold w-24 sm:w-32;
 }
 
 
 .cards-container {
-  @apply grid grid-cols-5 py-5 px-5 gap-y-10;
+  @apply grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 xl:grid-cols-5 gap-x-3 sm:gap-x-4 gap-y-6 sm:gap-y-10 px-3 sm:px-5 py-5;
 }
 
 .trending {
-  @apply flex justify-between border-b-[2px] pb-3 pt-5 px-5
+  @apply flex flex-col sm:flex-row sm:justify-between sm:items-center gap-3 border-b-[2px] pb-3 pt-5 px-5
 }
 
 .trending ul {
-  @apply flex gap-3
+  @apply flex flex-wrap gap-2 sm:gap-3
 }
 
 .trending ul button {
@@ -105,16 +104,16 @@ body {
 }
 
 .trending h3 {
-  @apply font-bold text-2xl
+  @apply font-bold text-xl sm:text-2xl
 }
 
 .cards {
-  @apply flex flex-col w-70 gap-3;
+  @apply flex flex-col w-full gap-2 sm:gap-3;
   
 }
 
 .cards img {
-  @apply w-full h-105 rounded-[20px] shadow
+  @apply w-full h-full object-cover
 }
 
 .new-chart-btn {
@@ -130,11 +129,15 @@ body {
 }
 
 .detail-container {
-  @apply flex px-5 gap-3 pt-20 items-start mb-10
+  @apply flex flex-col lg:flex-row px-3 sm:px-5 gap-4 lg:gap-3 pt-24 lg:pt-20 items-start mb-10
+}
+
+.detail-gallery {
+  @apply flex lg:hidden flex-col w-full gap-3
 }
 
 .detail-images {
-  @apply grid grid-cols-2 flex-1 gap-3
+  @apply hidden lg:grid grid-cols-2 flex-1 gap-3
 }
 
 .detail-images img {
@@ -151,7 +154,7 @@ body {
 }
 
 .login {
-  @apply flex flex-col justify-between items-center h-screen;
+  @apply flex flex-col justify-between items-center min-h-screen pt-20 px-4;
 }
 
 .login-card {
@@ -175,7 +178,7 @@ body {
 }
 
 .social-btn a {
-  @apply border border-[#E2E2E2] rounded-xl px-20 py-3
+  @apply border border-[#E2E2E2] rounded-xl px-4 sm:px-8 py-3
 }
 
 .social-btn svg {
@@ -220,15 +223,21 @@ body {
 }
 
 .detail-info {
-  @apply flex flex-col;
-  width: 40%;
-  padding: 30px;
-  position: sticky;
-  top: 90px;
+  @apply flex flex-col w-full;
+  padding: 20px 0;
+}
+
+@media (min-width: 1024px) {
+  .detail-info {
+    width: 40%;
+    padding: 30px;
+    position: sticky;
+    top: 90px;
+  }
 }
 
 .detail-info h1 {
-  font-size: 30px;
+  font-size: clamp(22px, 4vw, 30px);
   font-weight: 500;
   margin-bottom: 15px;
 }
@@ -240,7 +249,7 @@ body {
 }
 
 .detail-info h2 {
-  font-size: 28px;
+  font-size: clamp(22px, 3.5vw, 28px);
   margin-bottom: 25px;
 }
 
@@ -370,15 +379,15 @@ body {
 }
 
 .checkout-header {
-  @apply flex justify-center items-center h-[100px] border-b border-[#E2E2E2]
+  @apply flex justify-center items-center mt-20 h-20 sm:h-[100px] border-b border-[#E2E2E2]
 }
 
 .checkout-container {
-  @apply flex gap-16 px-10 py-10 items-start max-w-[1400px] mx-auto justify-center
+  @apply flex flex-col-reverse lg:flex-row gap-8 lg:gap-16 px-4 sm:px-6 lg:px-10 py-6 lg:py-10 items-start max-w-[1400px] mx-auto justify-center
 }
 
 .checkout-form {
-  @apply flex flex-col gap-8 w-full max-w-[620px]
+  @apply flex flex-col gap-6 sm:gap-8 w-full max-w-[620px]
 }
 
 .checkout-section {
@@ -394,7 +403,7 @@ body {
 }
 
 .two-col {
-  @apply grid grid-cols-2 gap-3
+  @apply grid grid-cols-1 sm:grid-cols-2 gap-3
 }
 
 .shipping-method {
@@ -446,7 +455,7 @@ body {
 }
 
 .order-summary {
-  @apply flex flex-col gap-6 bg-transparent p-0 w-full max-w-[480px]
+  @apply flex flex-col gap-6 bg-transparent p-0 w-full lg:max-w-[480px]
 }
 
 .cart-item {
@@ -498,5 +507,5 @@ body {
 }
 
 .payment-icons {
-  @apply w-[299px] h-[55px] object-contain
+  @apply w-full max-w-[299px] h-[55px] object-contain
 }

@@ -94,8 +94,10 @@ export default function Cart() {
   const safeCartItems = Array.isArray(cartItems) ? cartItems : [];
 
   return (
-    <div className="max-w-[1200px] mx-auto px-5 pt-28 pb-16 min-h-screen">
-      <h1 className="text-3xl font-bold mb-8">Shopping Cart</h1>
+    <div className="max-w-[1200px] mx-auto px-4 sm:px-5 pt-28 pb-16 min-h-screen">
+      <h1 className="text-2xl sm:text-3xl font-bold mb-6 sm:mb-8">
+        Shopping Cart
+      </h1>
 
       {safeCartItems.length === 0 ? (
         <div className="text-center py-16 bg-gray-50 rounded-lg border border-gray-200 shadow-sm">
@@ -121,7 +123,7 @@ export default function Cart() {
               return (
                 <div
                   key={item.id}
-                  className="flex gap-6 border border-gray-200 p-4 rounded-lg bg-white shadow-sm relative"
+                  className="flex gap-4 sm:gap-6 border border-gray-200 p-3 sm:p-4 rounded-lg bg-white shadow-sm relative"
                 >
                   <button
                     onClick={() => handleRemove(item.id)}
@@ -152,12 +154,12 @@ export default function Cart() {
                         : "/placeholder.png"
                     }
                     alt={productDetail.title || "Product"}
-                    className="w-28 h-36 object-cover rounded border border-gray-100"
+                    className="w-20 h-28 sm:w-28 sm:h-36 shrink-0 object-cover rounded border border-gray-100"
                   />
 
-                  <div className="flex flex-col justify-between py-2 flex-1">
+                  <div className="flex flex-col justify-between py-1 sm:py-2 flex-1 pr-6">
                     <div>
-                      <h3 className="text-lg font-semibold">
+                      <h3 className="text-base sm:text-lg font-semibold">
                         {productDetail.title || "Unknown Product"}
                       </h3>
                       <p className="text-[#8CC63F] font-medium text-sm mt-1">
@@ -165,7 +167,7 @@ export default function Cart() {
                       </p>
                     </div>
 
-                    <div className="flex items-center mt-4">
+                    <div className="flex flex-wrap items-center justify-between gap-3 mt-4">
                       <div className="flex items-center border border-gray-300 rounded overflow-hidden">
                         <button
                           onClick={() =>
@@ -187,13 +189,11 @@ export default function Cart() {
                           +
                         </button>
                       </div>
-                    </div>
-                  </div>
 
-                  <div className="ml-auto flex items-end py-2 pr-2">
-                    <p className="font-bold text-lg">
-                      Rs. {(price * item.quantity).toFixed(2)}
-                    </p>
+                      <p className="font-bold text-base sm:text-lg">
+                        Rs. {(price * item.quantity).toFixed(2)}
+                      </p>
+                    </div>
                   </div>
                 </div>
               );
@@ -201,7 +201,7 @@ export default function Cart() {
           </div>
 
           <div className="w-full lg:w-[350px]">
-            <div className="bg-gray-50 border border-gray-200 rounded-lg p-6 sticky top-28 shadow-sm">
+            <div className="bg-gray-50 border border-gray-200 rounded-lg p-5 sm:p-6 lg:sticky lg:top-28 shadow-sm">
               <h2 className="text-xl font-bold border-b border-gray-300 pb-4 mb-4">
                 Order Summary
               </h2>

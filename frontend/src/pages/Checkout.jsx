@@ -116,7 +116,7 @@ export default function Checkout() {
     <>
       {toast.show && (
         <div
-          className={`fixed top-24 right-5 px-6 py-3 rounded-lg shadow-lg text-white font-medium z-50 transition-all duration-300 transform translate-y-0 opacity-100 ${
+          className={`fixed top-24 left-3 right-3 sm:left-auto sm:right-5 sm:max-w-sm px-4 sm:px-6 py-3 rounded-lg shadow-lg text-white text-sm sm:text-base font-medium z-[80] transition-all duration-300 transform translate-y-0 opacity-100 ${
             toast.type === "success" ? "bg-[#8CC63F]" : "bg-red-500"
           }`}
         >
