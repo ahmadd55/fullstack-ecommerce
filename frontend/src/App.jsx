@@ -16,6 +16,7 @@ import AdminLogin from "./pages/dashboard/AdminLogin";
 import OrderManager from "./pages/dashboard/OrderManager";
 import UserManager from "./pages/dashboard/UserManager";
 import CategoryPage from "./pages/CategoryPage";
+import SearchResults from "./pages/SearchResults";
 import UserProfile from "./pages/UserProfile";
 
 import AdminRoute from "./components/AdminRoute";
@@ -30,6 +31,7 @@ export default function App() {
           <Route path="/" element={<Home />} />
           <Route path="/detail/:id" element={<Detail />} />
           <Route path="/category/:id" element={<CategoryPage />} />
+          <Route path="/search" element={<SearchResults />} />
 
           <Route element={<UserRoute />}>
             <Route path="/cart" element={<Cart />} />

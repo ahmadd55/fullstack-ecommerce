@@ -1,5 +1,6 @@
 import fs from "fs";
 import csv from "csv-parser";
+import { Op } from "sequelize";
 
 import {
   sequelize,
@@ -63,12 +64,95 @@ export const createProduct = async ({
   return product;
 };
 
-export const getAllProducts = async (page = 1, limit = 30, categoryId = null) => {
+const MAX_SEARCH_TERMS = 6;
+
+// `%` and `_` are ILIKE wildcards, so a user typing them must not widen the match.
+const escapeLike = (value) => value.replace(/[\\%_]/g, "\\$&");
+
+const toTerms = (search) =>
+  String(search).trim().split(/\s+/).filter(Boolean).slice(0, MAX_SEARCH_TERMS);
+
+// Every term must match somewhere, but each one may match a different field, so
+// "men shirt" still finds a shirt that only knows it is a men's product via its category.
+const buildSearchCondition = async (terms) => {
+  const perTerm = await Promise.all(
+    terms.map(async (term) => {
+      const pattern = `%${escapeLike(term)}%`;
+
+      const [categories, subCategories] = await Promise.all([
+        Category.findAll({
+          where: { name: { [Op.iLike]: pattern } },
+          attributes: ["id"],
+          raw: true,
+        }),
+        SubCategory.findAll({
+          where: { name: { [Op.iLike]: pattern } },
+          attributes: ["id"],
+          raw: true,
+        }),
+      ]);
+
+      const matchers = [
+        { title: { [Op.iLike]: pattern } },
+        { description: { [Op.iLike]: pattern } },
+      ];
+
+      if (categories.length > 0) {
+        matchers.push({ categoryId: { [Op.in]: categories.map((row) => row.id) } });
+      }
+
+      if (subCategories.length > 0) {
+        matchers.push({
+          subCategoryId: { [Op.in]: subCategories.map((row) => row.id) },
+        });
+      }
+
+      return { [Op.or]: matchers };
+    })
+  );
+
+  return { [Op.and]: perTerm };
+};
+
+// A title hit means far more than a passing mention in the marketing copy.
+const buildRelevanceOrder = (search, terms) => {
+  const wholePhrase = sequelize.escape(`%${escapeLike(String(search).trim())}%`);
+
+  const anyTerm = terms
+    .map(
+      (term) =>
+        `"Product"."title" ILIKE ${sequelize.escape(`%${escapeLike(term)}%`)}`
+    )
+    .join(" OR ");
+
+  return [
+    sequelize.literal(
+      `CASE WHEN "Product"."title" ILIKE ${wholePhrase} THEN 0 WHEN ${anyTerm} THEN 1 ELSE 2 END ASC`
+    ),
+  ];
+};
+
+export const getAllProducts = async (
+  page = 1,
+  limit = 30,
+  categoryId = null,
+  search = null
+) => {
   const offset = (page - 1) * limit;
 
   const whereCondition = {};
   if (categoryId) {
     whereCondition.categoryId = categoryId; 
+  }
+
+  let order = [["created_at", "DESC"]];
+
+  const terms = search ? toTerms(search) : [];
+
+  if (terms.length > 0) {
+    const searchCondition = await buildSearchCondition(terms);
+    whereCondition[Op.and] = searchCondition[Op.and];
+    order = [...buildRelevanceOrder(search, terms), ...order];
   }
 
   const { count, rows: products } = await Product.findAndCountAll({
@@ -93,7 +177,7 @@ export const getAllProducts = async (page = 1, limit = 30, categoryId = null) =>
         attributes: ["id", "image"],
       }
     ],
-    order: [["created_at", "DESC"]],
+    order,
   });
 
   return {

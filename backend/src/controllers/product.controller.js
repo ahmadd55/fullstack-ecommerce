@@ -47,8 +47,8 @@ export const createProductController = async (req, res) => {
 
 export const getAllProductsController = async (req, res) => {
   try {
-    const { page = 1, limit = 30, category } = req.query;
-    const products = await getAllProducts(page, limit, category);
+    const { page = 1, limit = 30, category, search, q } = req.query;
+    const products = await getAllProducts(page, limit, category, search ?? q);
 
     return res.status(200).json({
       success: true,
