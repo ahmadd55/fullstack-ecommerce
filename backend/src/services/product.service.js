@@ -1,4 +1,4 @@
-import fs from "fs";
+import { Readable } from "stream";
 import csv from "csv-parser";
 import { Op } from "sequelize";
 
@@ -308,11 +308,11 @@ export const deleteProduct = async (id) => {
 };
 
 
-export const bulkUploadProductsService = async (filePath, adminId) => {
+export const bulkUploadProductsService = async (fileBuffer, adminId) => {
   const results = [];
 
   await new Promise((resolve, reject) => {
-    fs.createReadStream(filePath)
+    Readable.from(fileBuffer)
       .pipe(csv())
       .on("data", (data) => results.push(data))
       .on("end", resolve)
@@ -391,10 +391,5 @@ export const bulkUploadProductsService = async (filePath, adminId) => {
   } catch (error) {
     await transaction.rollback();
     throw new ApiError(500, "Error importing products: " + error.message);
-  } finally {
-  
-    if (fs.existsSync(filePath)) {
-      fs.unlinkSync(filePath);
-    }
   }
 };

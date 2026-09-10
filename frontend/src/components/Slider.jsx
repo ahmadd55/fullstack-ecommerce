@@ -1,11 +1,12 @@
 import { useState, useEffect, useCallback } from "react";
 import slider from "../assets/slider.webp";
+import slider1 from "../assets/slider1.webp";
+import slider2 from "../assets/slider2.webp";
 
-// ── Add all your slider images here ──────────────────────────────────────────
 const SLIDES = [
   { src: slider, alt: "GulAhmed Ideas PK – Summer Collection" },
-  { src: slider, alt: "GulAhmed Ideas PK – Summer Collection" },
-  { src: slider, alt: "GulAhmed Ideas PK – Summer Collection" },
+  { src: slider1, alt: "GulAhmed Ideas PK – Summer Collection" },
+  { src: slider2, alt: "GulAhmed Ideas PK – Summer Collection" },
 ];
 
 const AUTO_PLAY_INTERVAL = 4000;
@@ -24,7 +25,7 @@ export default function Slider() {
     return () => clearInterval(id);
   }, [total, paused, next]);
 
-  // ── Single image: uses your existing .slider CSS class exactly as-is ──────
+  
   if (total === 1) {
     return (
       <div className="slider">
@@ -33,14 +34,12 @@ export default function Slider() {
     );
   }
 
-  // ── Multi-image slider ────────────────────────────────────────────────────
   return (
     <div
       className="slider relative w-full overflow-hidden bg-black select-none"
       onMouseEnter={() => setPaused(true)}
       onMouseLeave={() => setPaused(false)}
     >
-      {/* Slides track */}
       <div
         className="flex transition-transform duration-500 ease-in-out will-change-transform"
         style={{ transform: `translateX(-${current * 100}%)` }}
@@ -62,7 +61,6 @@ export default function Slider() {
         ))}
       </div>
 
-      {/* ── Dot indicators ── */}
       <div className="absolute bottom-4 sm:bottom-5 left-1/2 -translate-x-1/2 flex gap-1.5 sm:gap-2 z-10">
         {SLIDES.map((_, i) => (
           <button
@@ -81,7 +79,6 @@ export default function Slider() {
         ))}
       </div>
 
-      {/* ── Progress bar ── */}
       <div className="absolute bottom-0 left-0 w-full h-[3px] bg-white/20 z-10">
         <div
           className="h-full bg-white"

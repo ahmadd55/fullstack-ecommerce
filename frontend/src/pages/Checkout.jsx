@@ -2,6 +2,7 @@ import Logo from "../assets/hm-logo.svg";
 import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 export default function Checkout() {
   const navigate = useNavigate();
@@ -295,13 +296,7 @@ export default function Checkout() {
               return (
                 <div key={item.id} className="cart-item">
                   <img
-                    src={
-                      images[0]?.image
-                        ? images[0].image.startsWith("http")
-                          ? images[0].image
-                          : `http://localhost:3000${images[0].image}`
-                        : "/placeholder.png"
-                    }
+                    src={resolveImageUrl(images[0])}
                     alt={productDetail.title}
                     className="w-16 h-16 object-cover rounded-md" 
                   />

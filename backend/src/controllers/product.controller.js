@@ -141,10 +141,9 @@ export const bulkUploadProducts = asyncHandler(async (req, res) => {
     throw new ApiError(400, "Please upload a CSV file");
   }
 
-  const filePath = req.file.path;
   const adminId = req.user.id;
 
-  const successCount = await bulkUploadProductsService(filePath, adminId);
+  const successCount = await bulkUploadProductsService(req.file.buffer, adminId);
 
   return res
     .status(201)

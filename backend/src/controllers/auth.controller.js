@@ -2,6 +2,7 @@ import { asyncHandler } from '../utils/asyncHandler.js';
 import { ApiError } from '../utils/ApiError.js';
 import { registerUser, loginUser, logoutUser, updateUserProfilePicture} from '../services/auth.service.js';
 import { ApiResponse } from '../utils/ApiResponse.js';
+import { uploadImageBuffer, isCloudinaryConfigured } from '../config/cloudinary.js';
 
 export const register = asyncHandler(async (req, res) => {
     const { firstName, lastName, email, phone, password, role } = req.body;
@@ -50,8 +51,12 @@ export const addProfilePicture = asyncHandler(async(req, res)=>{
     if(!req.file) {
         throw new ApiError(400, "Please upload a profile picture");
     }
-    const profilePicturePath = req.file.path; 
-    const data = await updateUserProfilePicture(userId, profilePicturePath);
+    if (!isCloudinaryConfigured()) {
+        throw new ApiError(500, "Image storage is not configured. Set the CLOUDINARY_* environment variables.");
+    }
+
+    const uploaded = await uploadImageBuffer(req.file.buffer, "profile-pictures");
+    const data = await updateUserProfilePicture(userId, uploaded.secure_url);
     return res
         .status(200)
         .json(new ApiResponse(200, data, "Profile picture updated successfully"));

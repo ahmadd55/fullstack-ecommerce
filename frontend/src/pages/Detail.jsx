@@ -1,14 +1,7 @@
 import { useState, useEffect } from "react";
 import { useParams, useNavigate } from "react-router-dom";
 import api from "../api/axios";
-
-const resolveImage = (image) => {
-  const path = image?.image || image;
-
-  if (!path) return "/placeholder.png";
-
-  return path.startsWith("http") ? path : `http://localhost:3000${path}`;
-};
+import { resolveImageUrl as resolveImage } from "../utils/imageUrl";
 
 export default function Detail() {
   const [product, setProduct] = useState(null);

@@ -1,19 +1,12 @@
 import { Link } from "react-router-dom";
-
-const resolveImage = (image) => {
-  const path = image?.image || image;
-
-  if (!path) return "/placeholder.png";
-
-  return path.startsWith("http") ? path : `http://localhost:3000${path}`;
-};
+import { resolveImageUrl } from "../utils/imageUrl";
 
 export default function Card({ product, isWishlisted, onWishlistToggle }) {
   return (
     <Link to={`/detail/${product.id}`} className="cards group">
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[14px] sm:rounded-[20px] bg-[#f5f5f5] shadow">
         <img
-          src={resolveImage(product.images?.[0])}
+          src={resolveImageUrl(product.images?.[0])}
           alt={product.title}
           className="w-full h-full object-cover"
           loading="lazy"

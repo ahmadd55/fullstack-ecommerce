@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import api from "../api/axios";
+import { resolveImageUrl } from "../utils/imageUrl";
 
 export default function Cart() {
   const [cartItems, setCartItems] = useState([]);
@@ -146,13 +147,7 @@ export default function Cart() {
                   </button>
 
                   <img
-                    src={
-                      images[0]?.image
-                        ? images[0].image.startsWith("http")
-                          ? images[0].image 
-                          : `http://localhost:3000${images[0].image}` 
-                        : "/placeholder.png"
-                    }
+                    src={resolveImageUrl(images[0])}
                     alt={productDetail.title || "Product"}
                     className="w-20 h-28 sm:w-28 sm:h-36 shrink-0 object-cover rounded border border-gray-100"
                   />

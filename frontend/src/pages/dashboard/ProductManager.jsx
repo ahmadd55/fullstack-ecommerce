@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import api from "../../api/axios";
+import { resolveImageUrl } from "../../utils/imageUrl";
 
 export default function ProductManager() {
   const [products, setProducts] = useState([]);
@@ -288,13 +289,7 @@ export default function ProductManager() {
                           <div className="w-12 h-12 rounded bg-surface-variant flex-shrink-0 overflow-hidden border border-outline-variant group-hover:shadow-md transition-shadow">
                             <img
                               className="w-full h-full object-cover"
-                              src={
-                                product.images?.[0]?.image
-                                  ? product.images[0].image.startsWith("http")
-                                    ? product.images[0].image
-                                    : `http://localhost:3000${product.images[0].image}`
-                                  : "https://via.placeholder.com/150?text=No+Image"
-                              }
+                              src={resolveImageUrl(product.images?.[0])}
                               alt={product.title}
                             />
                           </div>

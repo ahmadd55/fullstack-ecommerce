@@ -15,17 +15,37 @@ import AddressFactory       from "./address.js";
 import { OrderFactory, OrderItemFactory } from "./order.js";
 
 
-const sequelize = new Sequelize(
-  process.env.DB_NAME,
-  process.env.DB_USER,
-  process.env.DB_PASSWORD,
-  {
-    dialect: "postgres",
-    host: process.env.DB_HOST,
-    port: process.env.DB_PORT,
-    logging: false,
-  }
-);
+const isServerless = Boolean(process.env.VERCEL);
+
+const connectionOptions = {
+  dialect: "postgres",
+  logging: false,
+  // Every serverless invocation runs in its own container, so a normal-sized
+  // pool per instance quickly exhausts Postgres connection slots.
+  pool: isServerless
+    ? { max: 1, min: 0, idle: 0, acquire: 10000 }
+    : { max: 5, min: 0, idle: 10000, acquire: 30000 },
+};
+
+// Hosted Postgres (Neon, Supabase, Render) requires TLS; local Postgres usually has none.
+if (process.env.DATABASE_URL || process.env.DB_SSL === "true") {
+  connectionOptions.dialectOptions = {
+    ssl: { require: true, rejectUnauthorized: false },
+  };
+}
+
+const sequelize = process.env.DATABASE_URL
+  ? new Sequelize(process.env.DATABASE_URL, connectionOptions)
+  : new Sequelize(
+      process.env.DB_NAME,
+      process.env.DB_USER,
+      process.env.DB_PASSWORD,
+      {
+        ...connectionOptions,
+        host: process.env.DB_HOST,
+        port: process.env.DB_PORT,
+      }
+    );
 
 
 const User          = UserFactory(sequelize, Sequelize);
