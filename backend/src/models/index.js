@@ -1,6 +1,7 @@
 "use strict";
 import "dotenv/config.js";
 import { Sequelize } from "sequelize";
+import pg from "pg";
 
 
 import UserFactory          from "./user.js";
@@ -19,15 +20,14 @@ const isServerless = Boolean(process.env.VERCEL);
 
 const connectionOptions = {
   dialect: "postgres",
+  dialectModule: pg,
   logging: false,
-  // Every serverless invocation runs in its own container, so a normal-sized
-  // pool per instance quickly exhausts Postgres connection slots.
+ 
   pool: isServerless
     ? { max: 1, min: 0, idle: 0, acquire: 10000 }
     : { max: 5, min: 0, idle: 10000, acquire: 30000 },
 };
 
-// Hosted Postgres (Neon, Supabase, Render) requires TLS; local Postgres usually has none.
 if (process.env.DATABASE_URL || process.env.DB_SSL === "true") {
   connectionOptions.dialectOptions = {
     ssl: { require: true, rejectUnauthorized: false },
