@@ -1,16 +1,49 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useProducts } from "../contexts/ProductContext";
 import Slider from "../components/Slider";
 import Card from "../components/Card";
+import Toast from "../components/Toast";
 import api from "../api/axios";
 
 export default function Home() {
   const { products, loading, currentPage, totalPages, goToPage } = useProducts();
   const [wishlistedItems, setWishlistedItems] = useState([]);
+  const [toast, setToast] = useState({ show: false, message: "", type: "" });
+
+  const showNotification = (message, type = "success") => {
+    setToast({ show: true, message, type });
+
+    setTimeout(() => {
+      setToast({ show: false, message: "", type: "" });
+    }, 3000);
+  };
+
+  // Without this the hearts always render empty after a reload, even for items
+  // the user already saved.
+  useEffect(() => {
+    if (!localStorage.getItem("token")) return;
+
+    const fetchWishlist = async () => {
+      try {
+        const response = await api.get("/wishlist");
+        const items = response.data?.data || [];
+        setWishlistedItems(items.map((item) => item.productId));
+      } catch (error) {
+        console.log("Error loading wishlist", error);
+      }
+    };
+
+    fetchWishlist();
+  }, []);
 
   const handleWishlistToggle = async (e, productId) => {
     e.preventDefault();
     e.stopPropagation();
+
+    if (!localStorage.getItem("token")) {
+      showNotification("Please log in to save items to your wishlist", "error");
+      return;
+    }
 
     const isWishlisted = wishlistedItems.includes(productId);
 
@@ -18,14 +51,23 @@ export default function Home() {
       if (isWishlisted) {
         await api.delete(`/wishlist/${productId}`);
         setWishlistedItems((prev) => prev.filter((id) => id !== productId));
+        showNotification("Removed from your wishlist");
       } else {
         await api.post("/wishlist", { productId });
 
         setWishlistedItems((prev) => [...prev, productId]);
+        showNotification("Added to your wishlist");
       }
     } catch (error) {
       console.log("Error updating wishlist", error);
-      alert("Please login to manage wishlist");
+
+      const status = error.response?.status;
+
+      if (status === 401 || status === 403) {
+        showNotification("Your session has expired. Please log in again.", "error");
+      } else {
+        showNotification("Could not update your wishlist. Please try again.", "error");
+      }
     }
   };
 
@@ -33,6 +75,8 @@ export default function Home() {
 
   return (
     <>
+      <Toast show={toast.show} message={toast.message} type={toast.type} />
+
       <Slider />
 
       <div className="cards-container">

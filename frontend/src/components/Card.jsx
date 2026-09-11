@@ -2,6 +2,13 @@ import { Link } from "react-router-dom";
 import { resolveImageUrl } from "../utils/imageUrl";
 
 export default function Card({ product, isWishlisted, onWishlistToggle }) {
+  // Touch devices have no hover state, so on those the button has to stay
+  // visible or it could never be tapped. Already-saved items stay visible
+  // everywhere, so the user can spot them without hovering over every card.
+  const revealOnHover = isWishlisted
+    ? ""
+    : "[@media(hover:hover)]:opacity-0 [@media(hover:hover)]:group-hover:opacity-100 [@media(hover:hover)]:focus-visible:opacity-100";
+
   return (
     <Link to={`/detail/${product.id}`} className="cards group">
       <div className="relative w-full aspect-[3/4] overflow-hidden rounded-[14px] sm:rounded-[20px] bg-[#f5f5f5] shadow">
@@ -21,7 +28,7 @@ export default function Card({ product, isWishlisted, onWishlistToggle }) {
               isWishlisted
                 ? "text-red-500"
                 : "text-gray-400 hover:text-red-500 hover:shadow-lg"
-            }`}
+            } ${revealOnHover}`}
           >
             <svg
               xmlns="http://www.w3.org/2000/svg"
